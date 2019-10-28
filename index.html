@@ -5,6 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background-color: beige;
+      }
+    </style>
+    <script>
+      !(function() {
+        if ("PerformanceLongTaskTiming" in window) {
+          var g = (window.__tti = { e: [] });
+          g.o = new PerformanceObserver(function(l) {
+            g.e = g.e.concat(l.getEntries());
+          });
+          g.o.observe({ entryTypes: ["longtask"] });
+        }
+      })();
+    </script>
+    <script src="/tti.js"></script>
+    <script>
+      // 1. TTI
+      window.ttiPolyfill
+        .getFirstConsistentlyInteractive()
+        .then(tti => console.log({ tti }));
+      // 2. FP,FCP, and long tasks.
+      const observer = new PerformanceObserver(list => {
+        for (const entry of list.getEntries()) {
+          const { name, startTime, duration } = entry;
+          if (name === "self") console.log(`long-task(duration): ${duration}`);
+          else console.log(`${JSON.stringify(name)}: ${startTime + duration}`);
+        }
+      });
+      observer.observe({ entryTypes: ["longtask", "paint"] });
+      // 3. DCL, Load
+      document.addEventListener("DOMContentLoaded", e =>
+        console.log(`DCL: ${e.timeStamp}`)
+      );
+      window.addEventListener("load", e => console.log(`Load: ${e.timeStamp}`));
+    </script>
   </head>
-  <body></body>
+  <body>
+    <main>
+      <h1>Tracking Performance</h1>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum
+        aspernatur necessitatibus quasi earum, ipsa ipsam?
+      </p>
+    </main>
+    <script>
+      let number = 0;
+      for (let i = 0; i < 10000000; i++) {
+        number += 4;
+      }
+    </script>
+  </body>
 </html>

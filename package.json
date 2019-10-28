@@ -5,11 +5,14 @@
   "main": "src/index.js",
   "scripts": {
     "start": "live-server",
-    "format": "prettier index.html --write"
+    "format": "prettier index.html tti.js --write"
   },
   "license": "MIT",
   "devDependencies": {
     "live-server": "^1.2.1",
     "prettier": "^1.18.2"
+  },
+  "dependencies": {
+    "tti-polyfill": "^0.2.2"
   }
 }
